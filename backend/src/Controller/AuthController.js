@@ -1,0 +1,170 @@
+const userModel = require("../Models/user.model");
+const foodPartnerModel = require("../Models/foodPartner");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+const registerController = async (req, res) => {
+  const { fullname, email, password } = req.body;
+
+  const existEmail = await userModel.findOne({ email });
+  if (existEmail) {
+    return res.json({
+      message: "email already exist",
+    });
+  }
+
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  try {
+    const user = await userModel.create({
+      fullname,
+      email,
+      password: hashPassword,
+    });
+
+    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+    res.cookie("token", token);
+    res.json({
+      message: "registered successfully",
+      user: {
+        id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    res.json({
+      message: "something is wrong",
+    });
+  }
+};
+
+const loginController = async (req, res) => {
+  const { email, password } = req.body;
+  const isEmailExist = await userModel.findOne({ email });
+
+  if (!isEmailExist) {
+    return res.json({
+      message: "email not exist",
+    });
+  }
+  const bcryptPassword = await bcrypt.compare(password, isEmailExist.password);
+  if (!bcryptPassword) {
+    return res.json({
+      message: "wrong password",
+    });
+  }
+
+  try {
+    const token = jwt.sign({ id: isEmailExist._id }, process.env.SECRET_KEY);
+    res.cookie("token", token);
+    res.json({
+      message: "user logged in successfully",
+    });
+  } catch (error) {
+    res.json({
+      message: "somethng is wrong",
+    });
+  }
+};
+
+const logoutController = async (req, res) => {
+  res.clearCookie("token");
+  res.json({
+    message: "user logged out successfully",
+  });
+};
+
+const foodPartnerRegisterController = async (req, res) => {
+  const { name, email, password } = req.body;
+  const isEmailExist=await foodPartnerModel.findOne({email})
+  if(isEmailExist){
+    return res.json({
+        message:"email alredy exist"
+    })
+  }
+
+  const hashPassword=await bcrypt.hash(password,10)
+
+  try {
+
+    const user=await foodPartnerModel.create({
+        name,
+        email,
+        password:hashPassword
+    })
+
+    const token=jwt.sign({id:user._id},process.env.SECRET_KEY)
+    res.cookie("token",token)
+
+    res.json({
+        message:"food partner register successfully",
+        user
+    })
+    
+  } catch (error) {
+    
+    res.json({
+        message:"something is wrong",
+        error
+       
+    })
+
+  }
+
+};
+
+const  foodPartnerLoginController = async(req,res)=>{
+
+        const {email,password}=req.body
+
+        const isEmailExist=await foodPartnerModel.findOne({email})
+        if(!isEmailExist){
+            return res.json({
+                message:"invalid email id"
+            })
+        }
+
+        const bcryptPassword=await bcrypt.compare(password,isEmailExist.password)
+        if(!bcryptPassword){
+            return res.json({
+                message:"invalid password"
+            })
+        }
+
+        try {
+            
+            res.json({
+                message:"food partner logged in successfully",
+                user:{
+                    name:isEmailExist.name,
+                    email:isEmailExist.email,
+
+                }
+            })
+            const token =jwt.sign({id:isEmailExist._id},process.env.SECRET_KEY)
+            res.cookie("token",token)
+
+        } catch (error) {
+            res.json({
+                message:"something is wrong"
+            })
+        }
+
+}
+
+const foodPartnerLogoutController=async(req,res)=>{
+    res.clearCookie("token")
+    res.json({
+        message:"user logged out successfully"
+    })
+}
+
+module.exports = {
+  registerController,
+  loginController,
+  logoutController,
+  foodPartnerRegisterController,
+  foodPartnerLoginController,
+  foodPartnerLogoutController
+};

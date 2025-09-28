@@ -133,6 +133,9 @@ const  foodPartnerLoginController = async(req,res)=>{
         }
 
         try {
+          
+          const token =jwt.sign({id:isEmailExist._id},process.env.SECRET_KEY)
+          res.cookie("token",token)
             
             res.json({
                 message:"food partner logged in successfully",
@@ -142,8 +145,6 @@ const  foodPartnerLoginController = async(req,res)=>{
 
                 }
             })
-            const token =jwt.sign({id:isEmailExist._id},process.env.SECRET_KEY)
-            res.cookie("token",token)
 
         } catch (error) {
             res.json({

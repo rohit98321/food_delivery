@@ -75,11 +75,28 @@ const logoutController = async (req, res) => {
   });
 };
 
+const getController=async(req,res)=>{
+
+    const token =req.cookies.token;
+    if(!token) return res.status(404).json({message:"token invalid"})
+      try {
+        const decoded=jwt.verify(token,process.env.SECRET_KEY)
+        const user=await userModel.findById(decoded.id)
+
+        res.status(200).json({message:"authenticated user",user})
+      } catch (error) {
+        res.status(404).json({message:"something is wrong"})
+      }
+    
+
+
+}
+
 const foodPartnerRegisterController = async (req, res) => {
   const { name, email, password } = req.body;
   const isEmailExist=await foodPartnerModel.findOne({email})
   if(isEmailExist){
-    return res.json({
+    return res.status(404).json({
         message:"email alredy exist"
     })
   }
@@ -97,14 +114,14 @@ const foodPartnerRegisterController = async (req, res) => {
     const token=jwt.sign({id:user._id},process.env.SECRET_KEY)
     res.cookie("token",token)
 
-    res.json({
+    res.status(201).json({
         message:"food partner register successfully",
         user
     })
     
   } catch (error) {
     
-    res.json({
+    res.status(404).json({
         message:"something is wrong",
         error
        
@@ -120,14 +137,14 @@ const  foodPartnerLoginController = async(req,res)=>{
 
         const isEmailExist=await foodPartnerModel.findOne({email})
         if(!isEmailExist){
-            return res.json({
+            return res.status(404).json({
                 message:"invalid email id"
             })
         }
 
         const bcryptPassword=await bcrypt.compare(password,isEmailExist.password)
         if(!bcryptPassword){
-            return res.json({
+            return res.status(404).json({
                 message:"invalid password"
             })
         }
@@ -137,9 +154,9 @@ const  foodPartnerLoginController = async(req,res)=>{
           const token =jwt.sign({id:isEmailExist._id},process.env.SECRET_KEY)
           res.cookie("token",token)
             
-            res.json({
+            res.status(201).json({
                 message:"food partner logged in successfully",
-                user:{
+                foodPartner:{
                     name:isEmailExist.name,
                     email:isEmailExist.email,
 
@@ -147,7 +164,7 @@ const  foodPartnerLoginController = async(req,res)=>{
             })
 
         } catch (error) {
-            res.json({
+            res.status(404).json({
                 message:"something is wrong"
             })
         }
@@ -160,6 +177,21 @@ const foodPartnerLogoutController=async(req,res)=>{
         message:"user logged out successfully"
     })
 }
+const foodPartnerGetController= async (req,res)=>{
+    const token =req.cookies.token;
+    if(!token) return res.json(404).json({message:"token not created"})
+
+
+      try {
+        const decoded=jwt.verify(token,process.env.SECRET_KEY)
+        const foodPartner=await foodPartnerModel.findById(decoded.id)
+        res.status(200).json({message:"fetch data from token",foodPartner})
+      } catch (error) {
+        res.status(404).json({message:"something is wrong here",error})
+        
+      }
+
+}
 
 module.exports = {
   registerController,
@@ -167,5 +199,7 @@ module.exports = {
   logoutController,
   foodPartnerRegisterController,
   foodPartnerLoginController,
-  foodPartnerLogoutController
+  foodPartnerLogoutController,
+  getController,
+  foodPartnerGetController
 };

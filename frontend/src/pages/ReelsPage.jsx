@@ -27,6 +27,12 @@ const ReelsPage = () => {
     dispatch(setCurrentIndex(index));
   };
 
+
+  const render=videos?.map((v, index) => (
+    <div key={v.id} className="snap-start">
+      <ReelCard videoSrc={v} index={index} currentIndex={currentIndex} />
+    </div>))
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -34,11 +40,7 @@ const ReelsPage = () => {
 
   return (
     <div className="snap-y snap-mandatory h-screen overflow-scroll no-scrollbar">
-      {videos.map((v, index) => (
-        <div key={v.id} className="snap-start">
-          <ReelCard videoSrc={v.video} index={index} currentIndex={currentIndex} />
-        </div>
-      ))}
+     {render}
     </div>
   );
 };

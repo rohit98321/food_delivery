@@ -1,7 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { asyncPartnerLogout } from "../reduxToolKit/Actions/partner.action";
+import { asyncPartnerLogout } from "../../reduxToolKit/Actions/partner.action";
 import { useNavigate } from "react-router-dom";
+import CreateFoodItem from "../../components/Create";
 
 
 const PartnerStore = () => {
@@ -12,10 +13,12 @@ const PartnerStore = () => {
         navigate("/")
     }
   return (
-    <div>
+    <div className="">
       <button
       onClick={logoutHandler}
-       className="bg-red-400 p-2 rounded m-3">logout</button>
+      className="bg-red-400 p-2 rounded m-3">logout</button>
+      <CreateFoodItem/>
+
     </div>
   );
 };

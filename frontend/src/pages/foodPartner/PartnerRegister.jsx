@@ -1,9 +1,9 @@
 // src/pages/PartnerRegister.jsx
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import Animation from "../wrapers/Animation.jsx";
+import Animation from "../../wrapers/Animation.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { asyncPartnerRegister } from "../reduxToolKit/Actions/partner.action.jsx";
+import { asyncPartnerRegister } from "../../reduxToolKit/Actions/partner.action.jsx";
 
 const PartnerRegister = () => {
   const { reset, register, handleSubmit } = useForm();

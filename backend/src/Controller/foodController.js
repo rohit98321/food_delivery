@@ -5,17 +5,21 @@ const {v4:uuid} =require("uuid")
 const createFood=async (req,res)=>{
     const foodPartner=req.foodPartner
 
-    const {name,description}=req.body
+    const {title,description,price}=req.body
 
     const file=req.file
+    console.log("file",file.video);
 
-    const {url}= await uploadFile(file.buffer,uuid())
+    const video= await uploadFile(file.video.buffer,uuid())
+    const poster= await uploadFile(file.poster.buffer,uuid())
     
     try {
         const food=await foodModel.create({
-            name,
+            title,
             description,
-            video:url,
+            price,
+            poster:poster.url,
+            video:video.url,
             foodpartner:foodPartner._id
         })
         res.status(201).json({

@@ -1,11 +1,11 @@
 import {Routes, Route } from "react-router-dom";
 import UserLogin from "../pages/UserLogin";
 import UserRegister from "../pages/UserRegister";
-import PartnerLogin from "../pages/PartnerLogin";
-import PartnerRegister from "../pages/PartnerRegister";
+import PartnerLogin from "../pages/foodPartner/PartnerLogin";
+import PartnerRegister from "../pages/foodPartner/PartnerRegister";
 import Notfound from "../pages/Notfound";
 import Home from "../pages/Home";
-import PartnerStore from "../pages/PartnerStore";
+import PartnerStore from "../pages/foodPartner/PartnerStore";
 import UserProfile from "../pages/UserProfile";
 import UserAuth from "./UserAuth";
 

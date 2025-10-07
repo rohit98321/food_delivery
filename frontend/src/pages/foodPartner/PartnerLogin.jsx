@@ -1,9 +1,9 @@
 // src/pages/PartnerLogin.jsx
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import Animation from "../wrapers/Animation.jsx";
+import Animation from "../../wrapers/Animation.jsx";
 import { useDispatch } from "react-redux";
-import { asyncPartnerLogin } from "../reduxToolKit/Actions/partner.action.jsx";
+import { asyncPartnerLogin } from "../../reduxToolKit/Actions/partner.action.jsx";
 
 const PartnerLogin = () => {
   const {reset, register, handleSubmit } = useForm();

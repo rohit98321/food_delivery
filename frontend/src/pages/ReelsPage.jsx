@@ -2,8 +2,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReelCard from "../components/ReelCard";
-import { loadVideos, setCurrentIndex } from "../reduxToolKit/Slices/video.slice";
-import { asyncGetVideos } from "../reduxToolKit/Actions/video.action";
+import {
+  loadVideos,
+  setCurrentIndex,
+} from "../reduxToolKit/Slices/food.slice";
+import { asyncGetVideos } from "../reduxToolKit/Actions/food.action";
 
 const ReelsPage = () => {
   const dispatch = useDispatch();
@@ -17,7 +20,7 @@ const ReelsPage = () => {
   ];
 
   useEffect(() => {
-    dispatch(asyncGetVideos())
+    dispatch(asyncGetVideos());
   }, [dispatch]);
 
   const handleScroll = () => {
@@ -27,21 +30,23 @@ const ReelsPage = () => {
     dispatch(setCurrentIndex(index));
   };
 
-
-  const render=videos?.map((v, index) => (
-    <div key={v.id} className="snap-start">
+  const render = videos?.map((v, index) => (
+    <div key={v._id} className="snap-start">
       <ReelCard videoSrc={v} index={index} currentIndex={currentIndex} />
-    </div>))
+    </div>
+  ));
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  return (
+  return videos ? (
     <div className="snap-y snap-mandatory h-screen overflow-scroll no-scrollbar">
-     {render}
+      {render}
     </div>
+  ) : (
+    <div className="p-3 text-3xl text-blue-600"><h1>loding...</h1></div>
   );
 };
 

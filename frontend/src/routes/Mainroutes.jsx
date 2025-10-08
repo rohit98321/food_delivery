@@ -8,6 +8,7 @@ import Home from "../pages/Home";
 import PartnerStore from "../pages/foodPartner/PartnerStore";
 import UserProfile from "../pages/UserProfile";
 import UserAuth from "./UserAuth";
+import CreateFood from "../pages/foodPartner/CreateFood";
 
 const Mainroutes = () => {
   return (
@@ -24,6 +25,7 @@ const Mainroutes = () => {
         <Route path="/partner/login" element={<PartnerLogin />} />
         <Route path="/partner/register" element={<PartnerRegister />} />
         <Route path="/partner/store" element={<PartnerStore/>} />
+        <Route path="/partner/create/food" element={<CreateFood/>} />
 
 
           {/* PAGE NOT FOUND */}

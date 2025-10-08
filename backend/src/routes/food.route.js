@@ -13,6 +13,9 @@ router.post("/create",authMiddleware.partnerauthMiddleware, upload.fields([
   ]),foodController.createFood)
 
 router.get("/getall",authMiddleware.userauthMiddleware,foodController.getFood)
+router.get("/getall/:id",authMiddleware.userauthMiddleware,foodController.getFoodById)
+router.get("/getbyId",authMiddleware.partnerauthMiddleware,foodController.getPartnerFoods)
+
 
 
 module.exports=router

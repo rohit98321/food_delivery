@@ -1,7 +1,9 @@
 // src/components/CreateFoodItem.jsx
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios from "../Api/config";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CreateFoodItem = () => {
   const {
@@ -11,22 +13,28 @@ const CreateFoodItem = () => {
     formState: { errors },
   } = useForm();
 
+  const navigate=useNavigate()
+
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
   const onSubmit = async (data) => {
     const formData = new FormData();
+    console.log();
     formData.append("title", data.title);
     formData.append("poster", data.poster[0]);
     formData.append("video", data.video[0]);
     formData.append("description", data.description);
-    formData.append("price[amount]", data.amount);
-    formData.append("price[currency]", data.currency);
+    formData.append("price", Number(data.price));
+    formData.append("currency", data.currency);
 
     try {
       setIsUploading(true);
-      const res = await axios.post("api/food/create", formData, {
+      const res = await axios.post("/food/create", formData, {
+        withCredentials:true,
         headers: { "Content-Type": "multipart/form-data" },
+        maxBodyLength:Infinity,
+
         onUploadProgress: (progressEvent) => {
           const percent = Math.round(
             (progressEvent.loaded * 100) / progressEvent.total
@@ -35,13 +43,15 @@ const CreateFoodItem = () => {
         },
       });
       console.log(res.data);
-      alert("✅ Food item created successfully!");
+     
+      toast.success("Food item created successfully!")
+      navigate("/partner/store")
       reset();
       setUploadProgress(0);
       setIsUploading(false);
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to upload food item");
+      toast.error(err.response?.data?.message)
       setIsUploading(false);
     }
   };
@@ -126,12 +136,12 @@ const CreateFoodItem = () => {
             <div>
               <label className="block font-medium text-gray-700">Amount</label>
               <input
-                type="number"
-                {...register("amount", { required: true })}
+                type="Number"
+                {...register("price", { required: true })}
                 className="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="₹ Price"
               />
-              {errors.amount && (
+              {errors.price && (
                 <p className="text-red-500 text-sm mt-1">Amount required</p>
               )}
             </div>

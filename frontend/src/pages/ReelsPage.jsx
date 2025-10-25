@@ -10,7 +10,9 @@ import { asyncGetVideos } from "../reduxToolKit/Actions/food.action";
 
 const ReelsPage = () => {
   const dispatch = useDispatch();
-  const { videos, currentIndex } = useSelector((state) => state.video);
+  const check = useSelector((state) => state);
+  console.log( "check" ,check);
+  const { videos, currentIndex } = useSelector((state) => state.food);
 
   // Example static videos (can be fetched from API)
   const videoData = [

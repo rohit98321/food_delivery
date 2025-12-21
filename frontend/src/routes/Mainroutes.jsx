@@ -9,6 +9,7 @@ import PartnerStore from "../pages/foodPartner/PartnerStore";
 import UserProfile from "../pages/UserProfile";
 import UserAuth from "./UserAuth";
 import CreateFood from "../pages/foodPartner/CreateFood";
+import ProductVideo from "../pages/ProductVideo";
 
 const Mainroutes = () => {
   return (
@@ -19,6 +20,8 @@ const Mainroutes = () => {
            {/* USER routes */}
         <Route path="/user/login" element={<UserLogin />} />
         <Route path="/user/register" element={<UserRegister />} />
+        <Route path="/user/productvideo" element={<ProductVideo/>} />
+
         <Route path="/user/profile" element={<UserAuth><UserProfile/></UserAuth>} />
 
            {/* partner routes */}

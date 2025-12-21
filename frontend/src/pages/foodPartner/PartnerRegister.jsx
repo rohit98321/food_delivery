@@ -16,7 +16,7 @@ const PartnerRegister = () => {
     console.log(data);
     dispatch(asyncPartnerRegister(data))
     reset()
-     
+     navigate("/partner/login")
 
     
 

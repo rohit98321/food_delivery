@@ -39,6 +39,13 @@ const registerController = async (req, res) => {
   }
 };
 
+
+const addressController = async(req,res)=>{
+  const {area,city,phone,pincode,street,state,houseNo}=req.body;
+
+  
+}
+
 const loginController = async (req, res) => {
   const { email, password } = req.body;
   const isEmailExist = await userModel.findOne({ email });
@@ -201,5 +208,6 @@ module.exports = {
   foodPartnerLoginController,
   foodPartnerLogoutController,
   getController,
-  foodPartnerGetController
+  foodPartnerGetController,
+  addressController
 };

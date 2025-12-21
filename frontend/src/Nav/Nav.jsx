@@ -26,26 +26,38 @@ const Nav = () => {
       )}
 
       {user && (
+
+        <>
+
+        <NavLink
+          className={(e) => e.isActive && "text-[#3E7B27]"}
+          to={"/user/productvideo"}
+          >
+          Reels
+        </NavLink>
+
         <NavLink
           className={(e) => e.isActive && "text-[#3E7B27]"}
           to={"/user/profile"}
-        >
+          >
           profile
         </NavLink>
+        
+          </>
       )}
 
       {!user && !partnerdata && (
         <>
         <NavLink
           className={(e) => e.isActive && "text-[#3E7B27]"}
-          to={"/user/register"}
+          to={"/user/login"}
           >
           user
         </NavLink>
 
         <NavLink
           className={(e) => e.isActive && "text-[#3E7B27]"}
-          to={"/partner/register"}
+          to={"/partner/login"}
           >
           foodpartner
         </NavLink>

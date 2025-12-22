@@ -1,5 +1,6 @@
 const userModel = require("../Models/user.model");
 const foodPartnerModel = require("../Models/foodPartner");
+const userAddressModel=require("../Models/UserAddress")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -43,8 +44,87 @@ const registerController = async (req, res) => {
 const addressController = async(req,res)=>{
   const {area,city,phone,pincode,street,state,houseNo}=req.body;
 
+  const token =req.cookies.token;
+
+  if(!token) return res.status(404).json({message:"token invalid"})
+
+    try {
+      
+      const decoded=jwt.verify(token,process.env.SECRET_KEY);
+      const userAddress=await userAddressModel.create({
+        userId:decoded.id,
+        area,
+        city,
+        phone,
+        pincode,
+        street,
+        state,
+        houseNo
+      })
+
+      res.status(201).json({message:"address added successfully",userAddress})
+
+    } catch (error) {
+      res.status(404).json({message:"something is wrong",error})
+    }
+
+
+
   
 }
+
+const updateAddressController= async (req,res)=>{
+
+  try {
+
+    const id =req.params.id;
+
+    const existAddress=await userAddressModel.findById(id);
+    if(!existAddress){
+      return res.status(404).json({message:"address not found"})
+    }
+
+    const updateAddress=await userAddressModel.findByIdAndUpdate(id,req.body,{new:true})
+
+    res.status(200).json({message:"address updated successfully",updateAddress})
+    
+
+
+    
+  } catch (error) {
+    return res.status(404).json({message:"something is wrong",error})
+  }
+
+}
+
+
+const deleteAddressController= async (req,res)=>{
+
+  try {
+
+    const id =req.params.id;
+
+    const existAddress=await userAddressModel.findById(id);
+    if(!existAddress){
+      return res.status(404).json({message:"address not found"})
+    }
+
+    const deleteAddress=await userAddressModel.findByIdAndDelete(id)
+
+    res.status(200).json({message:"address delete successfully",deleteAddress})
+    
+
+
+    
+  } catch (error) {
+    return res.status(404).json({message:"something is wrong",error})
+  }
+
+}
+
+
+
+
 
 const loginController = async (req, res) => {
   const { email, password } = req.body;
@@ -209,5 +289,7 @@ module.exports = {
   foodPartnerLogoutController,
   getController,
   foodPartnerGetController,
-  addressController
+  addressController,
+  updateAddressController,
+  deleteAddressController
 };

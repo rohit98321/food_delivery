@@ -5,7 +5,9 @@ const router=express.Router()
 
 //user Authentications
 router.post("/user/register",authController.registerController)
-router.post("/user/address",authController.registerController)
+router.post("/user/address",authController.addressController)
+router.patch("/user/address/:id",authController.updateAddressController)
+router.delete("/user/address/:id",authController.deleteAddressController)
 router.post("/user/login",authController.loginController)
 router.post("/user/logout",authController.logoutController)
 router.get("/user/get",authController.getController)

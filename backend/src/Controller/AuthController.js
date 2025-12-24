@@ -42,27 +42,24 @@ const registerController = async (req, res) => {
 
 
 const addressController = async(req,res)=>{
-  const {area,city,phone,pincode,street,state,houseNo}=req.body;
+  const address=req.body;
+  const userId=req.user.id;
+  
 
-  const token =req.cookies.token;
-
-  if(!token) return res.status(404).json({message:"token invalid"})
-
+  console.log(req.body);
     try {
       
-      const decoded=jwt.verify(token,process.env.SECRET_KEY);
-      const userAddress=await userAddressModel.create({
-        userId:decoded.id,
-        area,
-        city,
-        phone,
-        pincode,
-        street,
-        state,
-        houseNo
-      })
+      const user=await userModel.findById(userId)
+      console.log(user);
 
-      res.status(201).json({message:"address added successfully",userAddress})
+      if (user.addresses.length === 0) {
+        address.isDefault = true;
+      }
+
+      user.addresses.push(address)
+      await user.save();
+
+      res.status(201).json({message:"address added successfully",userAddress:user.addresses})
 
     } catch (error) {
       res.status(404).json({message:"something is wrong",error})
@@ -73,24 +70,43 @@ const addressController = async(req,res)=>{
   
 }
 
-const updateAddressController= async (req,res)=>{
-
+const getAddressController= async (req,res)=>{
+  const id =req.params.id;
   try {
-
-    const id =req.params.id;
-
-    const existAddress=await userAddressModel.findById(id);
-    if(!existAddress){
-      return res.status(404).json({message:"address not found"})
-    }
-
-    const updateAddress=await userAddressModel.findByIdAndUpdate(id,req.body,{new:true})
-
-    res.status(200).json({message:"address updated successfully",updateAddress})
     
+    const getuserAddress=await userAddressModel.find({userId:id});
+
+    if(!getuserAddress){
+      return res.status(500).json({message:"address not found"});
+    } 
+
+    res.status(200).json({message:"address fetched successfully",getuserAddress })
 
 
+
+  } catch (error) {
+    return res.status(500).json({message:"something is wrong",error})
+  }
+}
+
+const updateAddressController= async (req,res)=>{
+    const updateAddress=req.body;
+    const user=req.user;
+    const addressId =req.params.id;
     
+    try {
+
+      const address=user.addresses.id(addressId)
+      if(!address){
+        return res.status(404).json({message:"address not found"})
+      }
+
+      //update address fields
+      Object.assign(address,updateAddress)
+      await user.save()
+
+      res.status(200).json({message:"address updated successfully",updatedAddress:address})
+      
   } catch (error) {
     return res.status(404).json({message:"something is wrong",error})
   }
@@ -100,24 +116,39 @@ const updateAddressController= async (req,res)=>{
 
 const deleteAddressController= async (req,res)=>{
 
+  const addressId =req.params.id;
+  const user=req.user;
+
+  console.log(addressId,user);
+
   try {
 
-    const id =req.params.id;
+    const deleteAddress=user.addresses.id(addressId)
 
-    const existAddress=await userAddressModel.findById(id);
-    if(!existAddress){
+    if(!deleteAddress){
       return res.status(404).json({message:"address not found"})
+    } 
+
+    const wasDefault = deleteAddress.isDefault;
+
+    // deleteAddress.remove()
+
+    await userModel.updateOne(
+      { _id: user.id },
+      { $pull: { addresses: { _id: addressId } } }
+    );
+
+
+    if (user.addresses.length > 0) {
+      user.addresses[0].isDefault = true;
     }
 
-    const deleteAddress=await userAddressModel.findByIdAndDelete(id)
 
-    res.status(200).json({message:"address delete successfully",deleteAddress})
-    
-
-
+    await user.save();
+    res.status(200).json({message:"address delete successfully",})
     
   } catch (error) {
-    return res.status(404).json({message:"something is wrong",error})
+    return res.status(500).json({message:"something is wrong",error})
   }
 
 }
@@ -291,5 +322,6 @@ module.exports = {
   foodPartnerGetController,
   addressController,
   updateAddressController,
-  deleteAddressController
+  deleteAddressController,
+  getAddressController
 };

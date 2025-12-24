@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import  asyncAddUserAddress  from '../reduxToolKit/Actions/userAddress.action'
+import { useDispatch, useSelector } from 'react-redux'
+import  {asyncAddUserAddress}  from '../reduxToolKit/Actions/userAddress.action'
 
 const AddAddress = () => {
 
@@ -9,9 +9,16 @@ const AddAddress = () => {
     const {register,handleSubmit}=useForm()
     const dispatch=useDispatch();
 
+      
+    const user=useSelector((state)=>state.user.user);
+
     const addressHandler=(addressdata)=>{
         dispatch(asyncAddUserAddress(addressdata))
+        dispatch(asyncAddUserAddress(user._id))
     }
+
+   
+    
 
   return (
     <div>

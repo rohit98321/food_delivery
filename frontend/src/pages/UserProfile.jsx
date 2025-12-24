@@ -1,61 +1,75 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import {asyncUserLogout,asyncGetUser} from "../reduxToolKit/Actions/user.actoin"
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import AddAddress from '../components/AddAddress'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  asyncUserLogout,
+  asyncGetUser,
+} from "../reduxToolKit/Actions/user.actoin";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import AddAddress from "../components/AddAddress";
+import { useForm } from "react-hook-form";
+import { asyncgetUserAddress } from "../reduxToolKit/Actions/userAddress.action";
+import UpdateUserAddress from "../components/UpdateUserAddress";
 
 const UserProfile = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const dispatch=useDispatch()
-  const navigate=useNavigate()
-  const user = useSelector((state) => state.user.user);
-  console.log("user details from profile",user);
-
-
-  const [check, setcheck] = useState(false)
+  const user=useSelector((state)=>state.user.user)
+  const userAddresses = useSelector((state) => state.user.user.addresses);
+  console.log("user details from profile", userAddresses);
   
+  
+ 
 
-  const logouthandler=()=>{
-    dispatch(asyncUserLogout())
-    navigate("/")
 
-  }
-  console.log("UserProfile mount");
+  const [check, setcheck] = useState(false);
 
-  const onOff=()=>{
-    setcheck(!check)
-  }
+  const logouthandler = () => {
+    dispatch(asyncUserLogout());
+    navigate("/");
+  };
+  console.log("UserProfile mount --> ", user._id);
+
+  const onOff = () => {
+    setcheck(!check);
+  };
 
   console.log(check);
 
-  useEffect(() => {
-  
-    dispatch(asyncGetUser())
-   
-     
-    }, [])
-
+  const updateAddressHandler = (addressdata) => {
+    console.log(addressdata);
+  };
 
   return (
     <div>
-
-      <h1 className='text-4xl'>{user.fullname}</h1>
+      <h1 className="text-4xl">{user.fullname}</h1>
       <h2>{user.email}</h2>
 
+      <button
+        onClick={onOff}
+        className="bg-neutral-800 rounded p-3 text-white m-2"
+      >
+        Add Address
+      </button>
 
-     <button onClick={onOff} className='bg-neutral-800 rounded p-3 text-white m-2' >Add Address</button>
+      {check && <AddAddress />}
 
-    {check && 
-    
-    <AddAddress/>
-    
-    }
+      
+    {userAddresses.map((address)=>{
+     return  <UpdateUserAddress key={address._id} address={address} />
+    })}
 
-    <button className='bg-neutral-800 rounded p-3 text-white m-2' onClick={logouthandler}>logout</button>
 
+
+      <button
+        className="bg-neutral-800 rounded p-3 text-white m-2"
+        onClick={logouthandler}
+      >
+        logout
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default UserProfile
+export default UserProfile;

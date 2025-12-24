@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Animation from "../wrapers/Animation.jsx";
 import {useDispatch} from "react-redux"
 import { asyncUserLogin } from "../reduxToolKit/Actions/user.actoin.jsx";
+import { asyncgetUserAddress } from "../reduxToolKit/Actions/userAddress.action.jsx";
 
 const UserLogin = () => {
   const { register, handleSubmit } = useForm();
@@ -13,6 +14,7 @@ const UserLogin = () => {
   const onSubmit = (data) => {
     
     dispatch(asyncUserLogin(data))
+    dispatch(asyncgetUserAddress())
     navigate("/")
     
   };

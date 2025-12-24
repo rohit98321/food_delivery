@@ -3,12 +3,6 @@ const mongoose=require("mongoose");
 
 
 const userAddressSchema=new mongoose.Schema({
-
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"user",
-        require:true,
-    },
     houseNo:{
         type:String
     },
@@ -36,6 +30,10 @@ const userAddressSchema=new mongoose.Schema({
         type:Number,
         require:true,
     },
+    isDefault:{
+        type:Boolean,
+        default:false,
+    }
 
 
 },{timestamps:true});

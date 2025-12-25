@@ -7,34 +7,84 @@ import { asyncPartnerRegister } from "../../reduxToolKit/Actions/partner.action.
 
 const PartnerRegister = () => {
   const { reset, register, handleSubmit } = useForm();
-  const dispatch=useDispatch()
-  const navigate=useNavigate()
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
-
     console.log(data);
-    dispatch(asyncPartnerRegister(data))
-    reset()
-     navigate("/partner/login")
-
-    
-
+    dispatch(asyncPartnerRegister(data));
+    reset();
+    navigate("/partner/login");
   };
 
   return (
     <Animation title="Food Partner Register">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <input {...register("name")} placeholder="Restaurant Name" className="w-full border p-2 rounded" />
-        <input {...register("email")} type="email" placeholder="Email" className="w-full border p-2 rounded" />
-        <input {...register("password")} type="password" placeholder="Password" className="w-full border p-2 rounded" />
-        
-        <button type="submit" className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600">
+        <input
+          {...register("shopName")}
+          placeholder="Shop Name"
+          className="w-full border p-2 rounded"
+        />
+        <input
+          {...register("ownerName")}
+          placeholder="Owner Name"
+          className="w-full border p-2 rounded"
+        />
+        <input
+          {...register("email")}
+          type="email"
+          placeholder="Email"
+          className="w-full border p-2 rounded"
+        />
+        <input
+          {...register("password")}
+          type="password"
+          placeholder="Password"
+          className="w-full border p-2 rounded"
+        />
+
+        <input
+          {...register("street")}
+          placeholder="street Name"
+          className="w-full border p-2 rounded"
+        />
+
+        <input
+          {...register("city")}
+          placeholder="city Name"
+          className="w-full border p-2 rounded"
+        />
+
+        <input
+          {...register("state")}
+          placeholder="state"
+          className="w-full border p-2 rounded"
+        />
+
+        <input
+          {...register("zipCode")}
+          placeholder="Enter Zip Code"
+          className="w-full border p-2 rounded"
+        />
+
+        <input
+          {...register("phone")}
+          placeholder="Phone Number"
+          className="w-full border p-2 rounded"
+        />
+
+        <button
+          type="submit"
+          className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600"
+        >
           Register
         </button>
       </form>
       <p className="mt-4 text-sm text-center">
-        Already have an account? <Link to="/partner/login" className="text-purple-500">Login</Link>
+        Already have an account?{" "}
+        <Link to="/partner/login" className="text-purple-500">
+          Login
+        </Link>
       </p>
     </Animation>
   );

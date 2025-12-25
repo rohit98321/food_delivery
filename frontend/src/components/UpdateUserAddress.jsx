@@ -1,12 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { asyncUpdateUserAddress } from "../reduxToolKit/Actions/userAddress.action";
+import { asyncDeleteUserAddress, asyncUpdateUserAddress } from "../reduxToolKit/Actions/userAddress.action";
 
-const UpdateUserAddress = ({address}) => {
-
-    console.log(address);
-  const { handleSubmit, register } = useForm({
+const UpdateUserAddress = ({ address }) => {
+  console.log(address);
+  const { reset, handleSubmit, register } = useForm({
     defaultValues: {
       houseNo: address?.houseNo,
       street: address?.street,
@@ -18,12 +17,16 @@ const UpdateUserAddress = ({address}) => {
     },
   });
 
-    const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
+  const updateAddressHandler = (addressdata) => {
+    dispatch(asyncUpdateUserAddress(address._id, addressdata));
+    reset()
+  };
 
-    const updateAddressHandler = (addressdata) => {
-            dispatch(asyncUpdateUserAddress(address._id,addressdata))
-    }
+  const deleteHandler = () => {
+    dispatch(asyncDeleteUserAddress(address._id))
+  };
 
   return (
     <div>
@@ -68,16 +71,23 @@ const UpdateUserAddress = ({address}) => {
           className="w-[90%] border p-2 rounded mb-2"
         />
 
-        <button
-          type="submit"
-          className="w-[50%] bg-blue-600 m-auto text-black py-2 rounded hover:bg-blue-300"
-        >
-          Update Address
-        </button>
+        <div className="m-auto w-1/4 flex gap-2.5">
+          <button
+            type="submit"
+            className="w-[50%] bg-blue-600 m-auto text-black py-2 rounded hover:bg-blue-300"
+          >
+            Update
+          </button>
+
+          <button
+            type="button"
+            onClick={deleteHandler}
+            className="w-[50%] bg-red-600 m-auto text-black py-2 rounded hover:bg-red-300"
+          >
+            delete
+          </button>
+        </div>
       </form>
-
-
-      
     </div>
   );
 };

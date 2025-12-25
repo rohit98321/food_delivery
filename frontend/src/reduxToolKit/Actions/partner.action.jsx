@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export const asyncGetfoodPartner = () => async (dispatch, getstate) => {
   try {
-    const res = await axios.get("/auth/foodpartner/get", {
+    const res = await axios.get("/foodPartner/get", {
       withCredentials: true,
     });
     console.log(res.data.foodPartner);
@@ -17,7 +17,7 @@ export const asyncGetfoodPartner = () => async (dispatch, getstate) => {
 
 export const asyncPartnerRegister = (details) => async (dispatch, getState) => {
   try {
-    const { data } = await axios.post("/auth/foodpartner/register", details, {
+    const { data } = await axios.post("/foodPartner/register", details, {
       withCredentials: true,
     });
     console.log(data);
@@ -31,7 +31,7 @@ export const asyncPartnerRegister = (details) => async (dispatch, getState) => {
 
 export const asyncPartnerLogin = (details) => async (dispatch, getState) => {
   try {
-    const { data } = await axios.post("/auth/foodpartner/login", details, {
+    const { data } = await axios.post("/foodPartner/login", details, {
       withCredentials: true,
     });
     console.log(data);

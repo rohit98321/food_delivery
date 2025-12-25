@@ -15,13 +15,9 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user=useSelector((state)=>state.user.user)
+  const user = useSelector((state) => state.user.user);
   const userAddresses = useSelector((state) => state.user.user.addresses);
   console.log("user details from profile", userAddresses);
-  
-  
- 
-
 
   const [check, setcheck] = useState(false);
 
@@ -47,27 +43,30 @@ const UserProfile = () => {
       <h2>{user.email}</h2>
 
       <button
+        className="bg-neutral-800 rounded p-3 text-white m-2"
+        onClick={logouthandler}
+      >
+        logout
+      </button>
+
+      <button
         onClick={onOff}
         className="bg-neutral-800 rounded p-3 text-white m-2"
       >
         Add Address
       </button>
 
-      {check && <AddAddress />}
+      {check && <AddAddress setcheck={setcheck} />}
+
+      {userAddresses.map((address) => {
+        return (
+          <div className="mb-5">
+            <UpdateUserAddress key={address._id} address={address} />
+          </div>
+        );
+      })}
 
       
-    {userAddresses.map((address)=>{
-     return  <UpdateUserAddress key={address._id} address={address} />
-    })}
-
-
-
-      <button
-        className="bg-neutral-800 rounded p-3 text-white m-2"
-        onClick={logouthandler}
-      >
-        logout
-      </button>
     </div>
   );
 };

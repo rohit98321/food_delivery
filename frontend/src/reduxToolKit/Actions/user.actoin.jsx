@@ -7,6 +7,7 @@ export const asyncGetUser = (d) => async (dispatch, getstate) => {
   try {
     const res = await axios.get("/auth/user/get", { withCredentials: true });
     console.log("async get user", res.data);
+    console.log("async calling again",res.data.user);
     dispatch(loadUser(res.data.user));
    
   } catch (error) {

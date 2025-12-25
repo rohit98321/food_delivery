@@ -1,6 +1,8 @@
 const jwt=require("jsonwebtoken");
 const foodpartner = require("../Models/foodPartner");
 const userModel=require("../Models/user.model")
+
+
 const partnerauthMiddleware=async (req,res,next)=>{
     const token=req.cookies.token;
     if(!token){
@@ -13,7 +15,6 @@ const partnerauthMiddleware=async (req,res,next)=>{
         const decode=jwt.verify(token,process.env.SECRET_KEY)
         console.log(decode.id);
         const foodPartner=await foodpartner.findOne({_id:decode.id})
-        console.log("foodpartner",foodPartner);
         req.foodPartner=foodPartner
         next()
     } catch (error) {

@@ -6,6 +6,14 @@ const router=express.Router()
 
 
 
-router.get("/:id",authMiddleware.userauthMiddleware,foodPartnerController.getFoodPartner)
+
+
+router.post(
+    "/register",
+    foodPartnerController.foodPartnerRegisterController
+  );
+  router.post("/login",foodPartnerController.foodPartnerLoginController);
+  router.post("/logout",foodPartnerController.foodPartnerLogoutController);
+  router.get("/get",authMiddleware.partnerauthMiddleware, foodPartnerController.foodPartnerGetController);
 
 module.exports=router

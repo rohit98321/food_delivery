@@ -1,8 +1,23 @@
 const mongoose = require("mongoose");
 
 
+
+
+const addressSchema = new mongoose.Schema({
+    street: String,
+    city: String,
+    state: String,
+    zipCode: Number,
+    phone:Number
+}, { _id: false }); 
+
+
 const foodPartnerSchema = new mongoose.Schema({
-    name:{
+    shopName:{
+        type:String,
+        requiere:true
+    },
+    ownerName:{
         type:String,
         require:true
     },
@@ -13,7 +28,8 @@ const foodPartnerSchema = new mongoose.Schema({
     },
     password:{
         type:String
-    }
+    },
+    address:addressSchema
 },{timestamps:true})
 
 const foodPartnerModel=mongoose.model("foodPartner",foodPartnerSchema)

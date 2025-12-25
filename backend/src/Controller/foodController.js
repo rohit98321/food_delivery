@@ -1,5 +1,5 @@
 const foodModel=require("../Models/food")
-const uploadFile = require("../services/storage.service")
+const uploadFile = require("../routes/services/storage.service")
 const {v4:uuid} =require("uuid")
 
 const createFood=async (req,res)=>{
@@ -52,43 +52,27 @@ const createFood=async (req,res)=>{
     
 }
 
-const getFood=async(req,res)=>{
 
-    try {
-        const fooditems=await foodModel.find()
-    res.json({
-        message:"fetch food itmes",
-        fooditems
-    })
-    } catch (error) {
+// const getAllFoodById=async(req,res)=>{
+
+//     const {id}=req.params
+//     console.log(id)
+
+//     try {
+//         const fooditems=await foodModel.find({foodpartner:id})
+//     res.status(200).json({
+//         message:"fetch food itmes",
+//         fooditems
+//     })
+//     } catch (error) {
         
-        res.json({
-            message:"something is wrong"
-        })
-    }
+//         res.status(404).json({
+//             message:"something is wrong",
+//             error
+//         })
+//     }
     
-}
-
-const getFoodById=async(req,res)=>{
-
-    const {id}=req.params
-    console.log(id)
-
-    try {
-        const fooditems=await foodModel.find({foodpartner:id})
-    res.status(200).json({
-        message:"fetch food itmes",
-        fooditems
-    })
-    } catch (error) {
-        
-        res.status(404).json({
-            message:"something is wrong",
-            error
-        })
-    }
-    
-}
+// }
 
 
 const getPartnerFoods=async(req,res)=>{
@@ -107,9 +91,71 @@ const getPartnerFoods=async(req,res)=>{
 }
 
 
+
+const singleFood=async(req,res)=>{
+    const {id}=req.params;
+    
+
+    console.log(id,req.body);
+
+    try {
+
+        const product=await foodModel.findById(id); 
+        if(!product){
+            return res.status(404).json({message:"product not found"})
+        }
+
+        res.status(200).json({message:"fetch single product",product})
+    
+
+    res.status(200).json({message:"food updated",updatedFoodProduct})
+        
+    } catch (error) {
+        return res.status(404).json({message:"something is wrong",error})
+    }
+
+
+
+
+}
+
+
+
+const updateFood=async(req,res)=>{
+    const {id}=req.params;
+    const {title,description,price,currency}=req.body;
+
+    console.log(id,req.body);
+
+    try {
+
+        
+    const product=await foodModel.findById(id);
+    if(!product){
+        return res.status(404).json({message:"product not found"})
+    }
+
+    const updatedFoodProduct=await foodModel.findByIdAndUpdate(id,{
+        title,
+        description,
+        price,
+        currency
+    },{new:true})
+
+    res.status(200).json({message:"food updated",updatedFoodProduct})
+        
+    } catch (error) {
+        return res.status(404).json({message:"something is wrong",error})
+    }
+
+
+
+
+}
+
 module.exports={
     createFood,
-    getFood,
-    getFoodById,
-    getPartnerFoods
+    getPartnerFoods,
+    updateFood,
+    singleFood
 }

@@ -1,6 +1,6 @@
 import { toast } from "react-toastify"
 import axios from "../../Api/config"
-import { loadVideos } from "../Slices/food.slice";
+import { loadSingleFood, loadVideos } from "../Slices/food.slice";
 import { loadPartnerfoods } from "../Slices/food.slice";
 
 
@@ -41,3 +41,16 @@ export const asyncGetVideos = (details) => async (dispatch, getState) => {
     }
 
   };
+
+
+  export const asyncGetSingleFood=(id)=>async(dispatch,getState)=>{
+
+    try {
+        const res=await axios.get("/food/getbyId"+id,{withCredentials:true})
+
+        dispatch(loadSingleFood(res.data.food))
+        console.log("single food action",res.data);
+    } catch (error) {
+        toast.error(error.response?.data?.message)
+    }
+  }

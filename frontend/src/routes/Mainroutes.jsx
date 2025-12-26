@@ -10,6 +10,7 @@ import UserProfile from "../pages/UserProfile";
 import UserAuth from "./UserAuth";
 import CreateFood from "../pages/foodPartner/CreateFood";
 import ProductVideo from "../pages/ProductVideo";
+import SingleFood from "../pages/foodPartner/SingleFood";
 
 const Mainroutes = () => {
   return (
@@ -29,6 +30,9 @@ const Mainroutes = () => {
         <Route path="/partner/register" element={<PartnerRegister />} />
         <Route path="/partner/store" element={<PartnerStore/>} />
         <Route path="/partner/create/food" element={<CreateFood/>} />
+
+         {/* partner routes */}
+        <Route path="/food/singlefood/:id" element={<SingleFood/>} />
 
 
           {/* PAGE NOT FOUND */}

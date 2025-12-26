@@ -10,6 +10,7 @@ import FoodCard from "../../components/FoodCard";
 const PartnerStore = () => {
     const navigate=useNavigate()
     const dispatch=useDispatch()
+    
     const logoutHandler=()=>{
         dispatch(asyncPartnerLogout())
         navigate("/")

@@ -44,13 +44,15 @@ export const asyncGetVideos = (details) => async (dispatch, getState) => {
 
 
   export const asyncGetSingleFood=(id)=>async(dispatch,getState)=>{
-
+        console.log("asyncGetSingleFood action invoked",id);
     try {
-        const res=await axios.get("/food/getbyId"+id,{withCredentials:true})
+        const res=await axios.get("/food/singleProduct/"+id,{withCredentials:true})
 
-        dispatch(loadSingleFood(res.data.food))
-        console.log("single food action",res.data);
+        console.log("response from single food action",res);
+        dispatch(loadSingleFood(res.data.product))
+        
     } catch (error) {
         toast.error(error.response?.data?.message)
+        console.log(error);
     }
   }
